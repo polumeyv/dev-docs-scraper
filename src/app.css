@@ -1,0 +1,109 @@
+@import 'tailwindcss';
+
+@layer base {
+  :root {
+    /* Light theme colors */
+    --color-bg-primary: #ffffff;
+    --color-bg-secondary: #fafafa;
+    --color-bg-tertiary: #f5f5f5;
+    --color-border: #e5e5e5;
+    --color-text-primary: #171717;
+    --color-text-secondary: #404040;
+    --color-text-tertiary: #737373;
+  }
+
+  .dark {
+    /* Dark theme colors */
+    --color-bg-primary: #171717;
+    --color-bg-secondary: #262626;
+    --color-bg-tertiary: #404040;
+    --color-border: #404040;
+    --color-text-primary: #fafafa;
+    --color-text-secondary: #d4d4d4;
+    --color-text-tertiary: #a3a3a3;
+  }
+
+  * {
+    @apply border-neutral-200 dark:border-neutral-700;
+  }
+
+  body {
+    @apply bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] transition-colors duration-200;
+  }
+}
+
+@layer components {
+  /* Button styles */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply bg-emerald-500 text-white hover:bg-emerald-600 focus:ring-emerald-500;
+  }
+
+  .btn-secondary {
+    @apply bg-neutral-100 text-neutral-900 hover:bg-neutral-200 focus:ring-neutral-500 dark:bg-neutral-800 dark:text-neutral-100 dark:hover:bg-neutral-700;
+  }
+
+  .btn-ghost {
+    @apply text-neutral-700 hover:bg-neutral-100 focus:ring-neutral-500 dark:text-neutral-300 dark:hover:bg-neutral-800;
+  }
+
+  /* Card styles */
+  .card {
+    @apply rounded-lg border border-neutral-200 bg-white p-6 dark:border-neutral-700 dark:bg-neutral-900;
+  }
+
+  .card-hover {
+    @apply transition-shadow hover:shadow-lg;
+  }
+
+  /* Input styles */
+  .input {
+    @apply w-full rounded-md border border-neutral-300 bg-white px-4 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white;
+  }
+
+  /* Badge styles */
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+
+  .badge-official {
+    @apply bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300;
+  }
+
+  .badge-api {
+    @apply bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300;
+  }
+
+  .badge-tutorial {
+    @apply bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300;
+  }
+
+  .badge-github {
+    @apply bg-neutral-100 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-300;
+  }
+
+  .badge-reference {
+    @apply bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-300;
+  }
+}
+
+@layer utilities {
+  /* Custom animations */
+  @keyframes slide-down {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-slide-down {
+    animation: slide-down 0.2s ease-out;
+  }
+}
