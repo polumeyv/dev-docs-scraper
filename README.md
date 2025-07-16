@@ -36,8 +36,8 @@ This project was successfully migrated from a Python Flask + Docker architecture
 
 1. **Clone and Install**
    ```bash
-   git clone <your-repo>
-   cd docs-scraper
+   git clone https://github.com/polumeyv/dev-docs-scraper.git
+   cd dev-docs-scraper
    npm install
    ```
 
