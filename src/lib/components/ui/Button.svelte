@@ -17,10 +17,11 @@
 		...restProps
 	}: Props = $props();
 	
+	// Override default button styles with variants using Tailwind utilities only
 	const variantClasses = {
-		primary: 'btn-primary',
-		secondary: 'btn-secondary',
-		ghost: 'btn-ghost',
+		primary: '', // Uses default button styling from app.css
+		secondary: 'bg-neutral-100 text-neutral-900 hover:bg-neutral-200 focus:ring-neutral-500 dark:bg-neutral-800 dark:text-neutral-100 dark:hover:bg-neutral-700',
+		ghost: 'bg-transparent text-neutral-700 hover:bg-neutral-100 focus:ring-neutral-500 dark:text-neutral-300 dark:hover:bg-neutral-800',
 		danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500'
 	};
 	
@@ -30,7 +31,7 @@
 		lg: 'px-6 py-3 text-base'
 	};
 	
-	let buttonClasses = $derived(`btn ${variantClasses[variant]} ${sizeClasses[size]} ${className}`);
+	let buttonClasses = $derived(`${variantClasses[variant]} ${sizeClasses[size]} ${className}`);
 </script>
 
 <button

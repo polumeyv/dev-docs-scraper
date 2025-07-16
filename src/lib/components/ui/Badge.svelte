@@ -6,12 +6,13 @@
 	
 	let { type, class: className = '' }: Props = $props();
 	
+	// Use Tailwind utilities only, no custom classes
 	const typeClasses = {
-		official: 'badge-official',
-		api: 'badge-api',
-		tutorial: 'badge-tutorial',
-		github: 'badge-github',
-		reference: 'badge-reference'
+		official: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300',
+		api: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
+		tutorial: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
+		github: 'bg-neutral-100 text-neutral-800 dark:bg-neutral-800 dark:text-neutral-300',
+		reference: 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-300'
 	};
 	
 	const typeLabels = {
@@ -23,6 +24,6 @@
 	};
 </script>
 
-<span class={`badge ${typeClasses[type]} ${className}`}>
+<span class={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${typeClasses[type]} ${className}`}>
 	{typeLabels[type]}
 </span>

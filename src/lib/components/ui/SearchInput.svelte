@@ -68,7 +68,7 @@
 			bind:value
 			type="text"
 			{placeholder}
-			class="input pl-10 pr-10"
+			class="pl-10 pr-10"
 			onfocus={() => focused = true}
 			onblur={() => setTimeout(() => focused = false, 200)}
 			onkeydown={handleKeyDown}

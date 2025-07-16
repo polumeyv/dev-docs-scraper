@@ -324,7 +324,7 @@
 								type="text"
 								bind:value={newFolderName}
 								placeholder="Enter folder name"
-								class="input flex-1"
+								class="flex-1"
 								onkeypress={(e) => e.key === 'Enter' && createFolder()}
 							/>
 							<Button onclick={createFolder} size="sm">
