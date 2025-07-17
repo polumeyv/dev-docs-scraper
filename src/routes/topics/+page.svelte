@@ -60,7 +60,7 @@
 			clearTimeout(timeout);
 			activeRequests.delete(controller);
 			
-			if (error.name === 'AbortError') {
+			if (error instanceof Error && error.name === 'AbortError') {
 				throw new Error('Request timed out. Topic discovery is taking longer than expected.');
 			}
 			
@@ -267,7 +267,7 @@
 				...progressData,
 				stage: 'error',
 				message: errorMessage,
-				error: errorMessage,
+				error: null,
 				progress: 0
 			};
 			

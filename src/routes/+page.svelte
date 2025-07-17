@@ -94,7 +94,7 @@
 			clearTimeout(timeout);
 			activeRequests.delete(controller);
 			
-			if (error.name === 'AbortError') {
+			if (error instanceof Error && error.name === 'AbortError') {
 				throw new Error('Request timed out. Please check your connection and try again.');
 			}
 			
