@@ -205,7 +205,7 @@
 		<div class="container mx-auto px-4 py-4">
 			<div class="flex items-center justify-between">
 				<div class="flex items-center gap-3">
-					<div class="rounded-lg bg-brand p-2">
+					<div class="rounded-lg bg-emerald-500 p-2">
 						<BookOpen size={24} class="text-white" />
 					</div>
 					<div>
@@ -269,39 +269,39 @@
 					<button
 						type="button"
 						onclick={() => showFolderDropdown = !showFolderDropdown}
-						class="flex w-full items-center justify-between rounded-md border border-scale-300 bg-white px-4 py-2.5 text-left text-sm focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/20 dark:border-scale-700 dark:bg-scale-900"
+						class="flex w-full items-center justify-between rounded-md border border-neutral-300 bg-white px-4 py-2.5 text-left text-sm focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-neutral-700 dark:bg-neutral-900"
 					>
 						<span class="flex items-center gap-2">
-							<FolderPlus size={18} class="text-scale-500" />
+							<FolderPlus size={18} class="text-neutral-500" />
 							{#if selectedFolder}
 								<span class="text-[var(--color-text-primary)]">{selectedFolder}</span>
 							{:else}
-								<span class="text-scale-500">Select a folder to save documentation</span>
+								<span class="text-neutral-500">Select a folder to save documentation</span>
 							{/if}
 						</span>
-						<ChevronDown size={18} class="text-scale-400" />
+						<ChevronDown size={18} class="text-neutral-400" />
 					</button>
 					
 					{#if showFolderDropdown}
 						<div 
-							class="absolute z-10 mt-1 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-scale-800 animate-slide-down"
+							class="absolute z-10 mt-1 w-full rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-neutral-800 animate-slide-down"
 							transition:fly={{ y: -10, duration: 200 }}
 						>
 							<div class="py-1">
 								{#each availableFolders as folder}
 									<button
 										type="button"
-										class="flex w-full items-center px-4 py-2 text-sm text-scale-700 hover:bg-scale-100 dark:text-scale-300 dark:hover:bg-scale-700"
+										class="flex w-full items-center px-4 py-2 text-sm text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-700"
 										onclick={() => { selectedFolder = folder; showFolderDropdown = false; }}
 									>
 										{folder}
 									</button>
 								{/each}
 								
-								<div class="border-t border-scale-200 dark:border-scale-700">
+								<div class="border-t border-neutral-200 dark:border-neutral-700">
 									<button
 										type="button"
-										class="flex w-full items-center gap-2 px-4 py-2 text-sm text-brand hover:bg-scale-100 dark:hover:bg-scale-700"
+										class="flex w-full items-center gap-2 px-4 py-2 text-sm text-emerald-600 hover:bg-neutral-100 dark:hover:bg-neutral-700"
 										onclick={() => { showCreateFolder = true; showFolderDropdown = false; }}
 									>
 										<FolderPlus size={16} />
@@ -316,7 +316,7 @@
 				<!-- Create Folder Form -->
 				{#if showCreateFolder}
 					<div 
-						class="rounded-md border border-scale-300 bg-scale-50 p-4 dark:border-scale-700 dark:bg-scale-800"
+						class="rounded-md border border-neutral-300 bg-neutral-50 p-4 dark:border-neutral-700 dark:bg-neutral-800"
 						transition:fly={{ y: -10, duration: 200 }}
 					>
 						<div class="flex gap-2">
@@ -324,7 +324,7 @@
 								type="text"
 								bind:value={newFolderName}
 								placeholder="Enter folder name"
-								class="input flex-1"
+								class="flex-1"
 								onkeypress={(e) => e.key === 'Enter' && createFolder()}
 							/>
 							<Button onclick={createFolder} size="sm">
@@ -375,7 +375,7 @@
 								<div class="space-y-3">
 									<div class="flex items-start justify-between">
 										<Badge type={link.type} />
-										<ExternalLink size={16} class="text-scale-400" />
+										<ExternalLink size={16} class="text-neutral-400" />
 									</div>
 									
 									<div>
@@ -425,7 +425,7 @@
 					{#each recentSearches as search}
 						<button
 							onclick={() => { searchQuery = search.framework; searchDocumentation(); }}
-							class="inline-flex items-center gap-2 rounded-full border border-scale-300 bg-white px-4 py-2 text-sm text-scale-700 transition-colors hover:bg-scale-100 hover:text-scale-900 dark:border-scale-700 dark:bg-scale-800 dark:text-scale-300 dark:hover:bg-scale-700"
+							class="inline-flex items-center gap-2 rounded-full border border-neutral-300 bg-white px-4 py-2 text-sm text-neutral-700 transition-colors hover:bg-neutral-100 hover:text-neutral-900 dark:border-neutral-700 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
 						>
 							<Code2 size={16} />
 							{search.framework}
@@ -438,8 +438,8 @@
 		<!-- Empty State -->
 		{#if !loading && !searchResults && recentSearches.length === 0}
 			<div class="mx-auto max-w-md text-center">
-				<div class="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-brand/10">
-					<Sparkles size={40} class="text-brand" />
+				<div class="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-500/10">
+					<Sparkles size={40} class="text-emerald-500" />
 				</div>
 				<h3 class="mb-2 text-xl font-semibold text-[var(--color-text-primary)]">
 					Start Your Search
@@ -451,7 +451,7 @@
 					{#each popularFrameworks.slice(0, 5) as framework}
 						<button
 							onclick={() => { searchQuery = framework; searchDocumentation(); }}
-							class="rounded-full bg-scale-100 px-3 py-1 text-sm text-scale-700 hover:bg-scale-200 dark:bg-scale-800 dark:text-scale-300 dark:hover:bg-scale-700"
+							class="rounded-full bg-neutral-100 px-3 py-1 text-sm text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
 						>
 							{framework}
 						</button>
