@@ -22,6 +22,52 @@
 	let baseUrl = $state('');
 	let selectedTopic = $state<Topic | null>(null);
 	
+	// Request management
+	let activeRequests = new Set<AbortController>();
+	
+	// API helper function with timeout and error handling
+	async function apiRequest(url: string, options: RequestInit = {}) {
+		const controller = new AbortController();
+		activeRequests.add(controller);
+		
+		// Set up timeout
+		const timeout = setTimeout(() => {
+			controller.abort();
+		}, 15000); // 15 second timeout for topic discovery (longer due to AI processing)
+		
+		try {
+			const response = await fetch(url, {
+				...options,
+				signal: controller.signal
+			});
+			
+			clearTimeout(timeout);
+			activeRequests.delete(controller);
+			
+			// Handle response based on the new API format
+			const data = await response.json();
+			
+			if (!response.ok) {
+				// Extract error message from standardized error format
+				const errorMessage = data.error || `HTTP ${response.status}`;
+				const errorDetails = data.details ? `: ${data.details}` : '';
+				throw new Error(`${errorMessage}${errorDetails}`);
+			}
+			
+			return data;
+			
+		} catch (error) {
+			clearTimeout(timeout);
+			activeRequests.delete(controller);
+			
+			if (error instanceof Error && error.name === 'AbortError') {
+				throw new Error('Request timed out. Topic discovery is taking longer than expected.');
+			}
+			
+			throw error;
+		}
+	}
+	
 	// Real-time progress tracking
 	let socket: any = null;
 	let taskId = $state('');
@@ -72,14 +118,27 @@
 	});
 	
 	onDestroy(() => {
+		// Cancel all active requests
+		activeRequests.forEach(controller => {
+			controller.abort();
+		});
+		activeRequests.clear();
+		
+		// Disconnect WebSocket
 		if (socket) {
-			socket.disconnect();
+			try {
+				socket.disconnect();
+			} catch (err) {
+				console.warn('Error disconnecting WebSocket:', err);
+			}
 		}
 	});
 	
 	function setupWebSocket() {
 		try {
-			socket = io('http://localhost:5000');
+			// Use dynamic host based on current location
+			const wsUrl = `${window.location.protocol}//${window.location.host}`;
+			socket = io(wsUrl);
 			
 			socket.on('connect', () => {
 				console.log('Connected to real-time updates');
@@ -91,11 +150,23 @@
 				}
 			});
 			
-			socket.on('disconnect', () => {
-				console.log('Disconnected from real-time updates');
+			socket.on('disconnect', (reason: string) => {
+				console.log('Disconnected from real-time updates:', reason);
+				
+				// Don't try to reconnect if it was intentional
+				if (reason === 'io client disconnect') {
+					return;
+				}
 			});
+			
+			socket.on('connect_error', (err: any) => {
+				console.warn('WebSocket connection failed:', err.message);
+				// Continue without real-time updates
+			});
+			
 		} catch (err) {
-			console.warn('WebSocket connection failed, falling back to polling');
+			console.warn('WebSocket initialization failed:', err);
+			// Continue without real-time updates - the app should still function
 		}
 	}
 	
@@ -144,10 +215,21 @@
 			
 			// Subscribe to WebSocket updates for this task
 			if (socket && socket.connected) {
-				socket.emit('subscribe_task', { task_id: taskId });
+				try {
+					socket.emit('subscribe_task', { task_id: taskId });
+				} catch (wsErr) {
+					console.warn('Failed to subscribe to task updates:', wsErr);
+				}
 			}
 			
-			const response = await fetch('/api/discover-topics', {
+			// Update progress to show starting
+			updateProgress({
+				stage: 'url_analysis',
+				message: 'Starting topic discovery...',
+				progress: 10
+			});
+			
+			const data = await apiRequest('/api/discover-topics', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ 
@@ -157,28 +239,47 @@
 				})
 			});
 			
-			if (!response.ok) {
-				throw new Error('Failed to discover topics');
+			// Handle the standardized API response format
+			const responseData = data.data || data;
+			
+			if (!responseData.topics || !Array.isArray(responseData.topics)) {
+				throw new Error('No topics were discovered for this documentation site');
 			}
 			
-			const data = await response.json();
-			
-			if (data.error) {
-				throw new Error(data.error);
-			}
-			
-			topics = data.topics || [];
+			topics = responseData.topics;
 			dataFlow.topicsFound = topics.length;
 			
+			// Update progress to completion
+			updateProgress({
+				stage: 'complete',
+				message: `Discovered ${topics.length} topics successfully`,
+				progress: 100
+			});
+			
 		} catch (err) {
-			error = err instanceof Error ? err.message : 'Failed to discover topics';
 			console.error('Error discovering topics:', err);
+			const errorMessage = err instanceof Error ? err.message : 'Failed to discover topics';
+			
+			error = errorMessage;
+			
+			// Update progress to show error
 			progressData = {
 				...progressData,
 				stage: 'error',
-				message: 'Failed to discover topics',
-				error: null
+				message: errorMessage,
+				error: null,
+				progress: 0
 			};
+			
+			// Add specific error handling
+			if (errorMessage.includes('timeout')) {
+				error = 'Topic discovery timed out. The website might be slow to respond or temporarily unavailable.';
+			} else if (errorMessage.includes('Configuration error')) {
+				error = 'Service configuration error. Please try again later or contact support.';
+			} else if (errorMessage.includes('validation failed')) {
+				error = 'Invalid URL or framework. Please check your inputs and try again.';
+			}
+			
 		} finally {
 			loading = false;
 		}
