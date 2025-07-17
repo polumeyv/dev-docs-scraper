@@ -3,11 +3,8 @@ import { ScraperService } from '$lib/server/scraperService';
 import { IntelligentScraperService } from '$lib/server/intelligentScraperService';
 import { validateConfig } from '$lib/server/config';
 import { v4 as uuidv4 } from 'uuid';
-import { taskEvents } from '../sse/+server';
+import { taskEvents, activeTasks } from '$lib/server/taskEvents';
 import type { RequestHandler } from './$types';
-
-// Store active tasks (in production, use Redis or database)
-const activeTasks = new Map<string, any>();
 
 export const POST: RequestHandler = async ({ request }) => {
 	try {
@@ -132,6 +129,3 @@ export const GET: RequestHandler = async ({ url }) => {
 
 	return json(task);
 };
-
-// Export the active tasks for SSE endpoint
-export { activeTasks };

@@ -1,35 +1,5 @@
 import type { RequestHandler } from './$types';
-
-// Simple in-memory event system for task updates
-class TaskEventEmitter {
-	private listeners = new Map<string, Set<(data: any) => void>>();
-
-	subscribe(taskId: string, callback: (data: any) => void) {
-		if (!this.listeners.has(taskId)) {
-			this.listeners.set(taskId, new Set());
-		}
-		this.listeners.get(taskId)!.add(callback);
-	}
-
-	unsubscribe(taskId: string, callback: (data: any) => void) {
-		const listeners = this.listeners.get(taskId);
-		if (listeners) {
-			listeners.delete(callback);
-			if (listeners.size === 0) {
-				this.listeners.delete(taskId);
-			}
-		}
-	}
-
-	emit(taskId: string, data: any) {
-		const listeners = this.listeners.get(taskId);
-		if (listeners) {
-			listeners.forEach(callback => callback(data));
-		}
-	}
-}
-
-const taskEvents = new TaskEventEmitter();
+import { taskEvents } from '$lib/server/taskEvents';
 
 export const GET: RequestHandler = async ({ url, request }) => {
 	const taskId = url.searchParams.get('task_id');
@@ -91,6 +61,3 @@ export const GET: RequestHandler = async ({ url, request }) => {
 
 	return new Response(stream, { headers });
 };
-
-// Export for use by other modules
-export { taskEvents };
