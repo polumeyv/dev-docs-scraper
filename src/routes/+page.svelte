@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { fade, fly } from 'svelte/transition';
 	import { 
 		Search, 
@@ -56,6 +56,52 @@
 	
 	let suggestions = $state<string[]>([]);
 	
+	// Request management
+	let activeRequests = new Set<AbortController>();
+	
+	// API helper function with timeout and error handling
+	async function apiRequest(url: string, options: RequestInit = {}) {
+		const controller = new AbortController();
+		activeRequests.add(controller);
+		
+		// Set up timeout
+		const timeout = setTimeout(() => {
+			controller.abort();
+		}, 10000); // 10 second timeout
+		
+		try {
+			const response = await fetch(url, {
+				...options,
+				signal: controller.signal
+			});
+			
+			clearTimeout(timeout);
+			activeRequests.delete(controller);
+			
+			// Handle response based on the new API format
+			const data = await response.json();
+			
+			if (!response.ok) {
+				// Extract error message from standardized error format
+				const errorMessage = data.error || `HTTP ${response.status}`;
+				const errorDetails = data.details ? `: ${data.details}` : '';
+				throw new Error(`${errorMessage}${errorDetails}`);
+			}
+			
+			return data;
+			
+		} catch (error) {
+			clearTimeout(timeout);
+			activeRequests.delete(controller);
+			
+			if (error.name === 'AbortError') {
+				throw new Error('Request timed out. Please check your connection and try again.');
+			}
+			
+			throw error;
+		}
+	}
+	
 	onMount(() => {
 		// Connect to WebSocket
 		websocket.connect();
@@ -63,13 +109,30 @@
 		// Load recent searches from localStorage
 		const saved = localStorage.getItem('recentSearches');
 		if (saved) {
-			try {recentSearches = JSON.parse(saved);} 
-			catch (e) {console.error('Failed to parse recent searches:', e);}
+			try {
+				recentSearches = JSON.parse(saved);
+			} catch (e) {
+				console.error('Failed to parse recent searches:', e);
+				// Clear corrupted data
+				localStorage.removeItem('recentSearches');
+			}
 		}
-		loadFolders();
-		return () => {
-			websocket.disconnect();
-		};
+		
+		// Load folders with error handling
+		loadFolders().catch(err => {
+			console.error('Initial folder loading failed:', err);
+		});
+	});
+	
+	onDestroy(() => {
+		// Cancel all active requests
+		activeRequests.forEach(controller => {
+			controller.abort();
+		});
+		activeRequests.clear();
+		
+		// Disconnect WebSocket
+		websocket.disconnect();
 	});
 	
 	async function searchDocumentation() {
@@ -82,34 +145,44 @@
 		searchResults = null;
 		
 		try {
-			const response = await fetch(`/api/search-docs?q=${encodeURIComponent(searchQuery)}`);
+			const data = await apiRequest(`/api/search-docs?q=${encodeURIComponent(searchQuery)}`);
 			
-			if (!response.ok) {
-				throw new Error('Failed to search documentation');
-			}
-			
-			const data = await response.json();
+			// Handle the standardized API response format
+			const responseData = data.data || data; // Support both old and new formats
 			
 			// Check if we have valid data
-			if (!data.links || !Array.isArray(data.links)) {
-				throw new Error(data.error || 'Invalid response format');
+			if (!responseData.links || !Array.isArray(responseData.links)) {
+				throw new Error('No documentation links found for this framework');
 			}
 			
 			searchResults = {
-				framework: searchQuery,
-				links: data.links,
+				framework: responseData.framework || searchQuery,
+				links: responseData.links,
 				timestamp: new Date()
 			};
 			
 			// Add to recent searches
 			recentSearches = [searchResults, ...recentSearches.filter(s => s.framework !== searchQuery)].slice(0, 5);
-			localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
 			
-			toast.success(`Found ${data.links.length} documentation links for ${searchQuery}`);
+			try {
+				localStorage.setItem('recentSearches', JSON.stringify(recentSearches));
+			} catch (e) {
+				console.warn('Failed to save recent searches to localStorage:', e);
+			}
+			
+			toast.success(`Found ${responseData.links.length} documentation link${responseData.links.length !== 1 ? 's' : ''} for ${searchQuery}`);
 			
 		} catch (err) {
 			console.error('Search error:', err);
-			toast.error('Failed to search for documentation', 'Please check your connection and try again.');
+			const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
+			
+			if (errorMessage.includes('timeout')) {
+				toast.error('Search timed out', 'The search is taking longer than expected. Please try again.');
+			} else if (errorMessage.includes('network') || errorMessage.includes('fetch')) {
+				toast.error('Network error', 'Please check your internet connection and try again.');
+			} else {
+				toast.error('Search failed', errorMessage);
+			}
 		} finally {
 			loading = false;
 		}
@@ -128,19 +201,29 @@
 	
 	async function loadFolders() {
 		try {
-			const response = await fetch('/api/folders');
-			if (response.ok) {
-				const data = await response.json();
-				if (data.folders && Array.isArray(data.folders)) {
-					availableFolders = data.folders.map((f: any) => f.name);
-				}
+			const data = await apiRequest('/api/folders');
+			
+			// Handle the standardized API response format
+			const responseData = data.data || data; // Support both old and new formats
+			
+			if (responseData.folders && Array.isArray(responseData.folders)) {
+				availableFolders = responseData.folders.map((f: any) => f.name);
 			} else {
-				console.warn('Failed to load folders:', response.status);
+				// Initialize with default folder if no folders found
+				availableFolders = ['documentation'];
 			}
 		} catch (err) {
 			console.error('Failed to load folders:', err);
-			// Initialize with default folder if API fails
+			const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
+			
+			// Don't show error toast for folder loading since it's not critical
+			// Just initialize with default folder
 			availableFolders = ['documentation'];
+			
+			// Only log specific error types
+			if (!errorMessage.includes('timeout')) {
+				console.warn('Folder loading error:', errorMessage);
+			}
 		}
 	}
 	
@@ -151,24 +234,38 @@
 		}
 		
 		try {
-			const response = await fetch('/api/folders', {
+			const data = await apiRequest('/api/folders', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ name: newFolderName })
 			});
 			
-			if (response.ok) {
-				await loadFolders();
-				selectedFolder = newFolderName;
-				newFolderName = '';
-				showCreateFolder = false;
-				toast.success('Folder created successfully');
-			} else {
-				const data = await response.json();
-				toast.error(data.error || 'Failed to create folder');
-			}
+			// Handle the standardized API response format
+			const responseData = data.data || data;
+			
+			// Reload folders to get the updated list
+			await loadFolders();
+			
+			// Set the newly created folder as selected
+			selectedFolder = responseData.name || newFolderName;
+			newFolderName = '';
+			showCreateFolder = false;
+			
+			toast.success('Folder created successfully');
+			
 		} catch (err) {
-			toast.error('Failed to create folder');
+			console.error('Failed to create folder:', err);
+			const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
+			
+			if (errorMessage.includes('already exists')) {
+				toast.error('Folder already exists', 'Please choose a different name.');
+			} else if (errorMessage.includes('timeout')) {
+				toast.error('Request timed out', 'Please try again.');
+			} else if (errorMessage.includes('Permission denied')) {
+				toast.error('Permission denied', 'Unable to create folder. Please check permissions.');
+			} else {
+				toast.error('Failed to create folder', errorMessage);
+			}
 		}
 	}
 	
@@ -179,7 +276,7 @@
 		}
 		
 		try {
-			const response = await fetch('/api/scrape', {
+			const data = await apiRequest('/api/scrape', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
@@ -189,22 +286,37 @@
 				})
 			});
 			
-			if (response.ok) {
-				const data = await response.json();
-				toast.success(
-					'Download started!', 
-					`Scraping ${link.title} to ${selectedFolder} folder`
-				);
-				
-				// Subscribe to task updates
-				if (data.task_id) {
-					websocket.subscribeToTask(data.task_id);
+			// Handle the standardized API response format
+			const responseData = data.data || data;
+			
+			toast.success(
+				'Download started!', 
+				`Scraping ${link.title} to ${selectedFolder} folder`
+			);
+			
+			// Subscribe to task updates
+			if (responseData.task_id) {
+				try {
+					websocket.subscribeToTask(responseData.task_id);
+				} catch (wsError) {
+					console.warn('Failed to subscribe to task updates:', wsError);
+					// Don't show error to user as the task will still run
 				}
-			} else {
-				toast.error('Failed to start download');
 			}
+			
 		} catch (err) {
-			toast.error('Failed to scrape documentation');
+			console.error('Failed to scrape documentation:', err);
+			const errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred';
+			
+			if (errorMessage.includes('timeout')) {
+				toast.error('Request timed out', 'Please try again or check your connection.');
+			} else if (errorMessage.includes('validation failed')) {
+				toast.error('Invalid request', 'Please check the URL and try again.');
+			} else if (errorMessage.includes('Configuration error')) {
+				toast.error('Service unavailable', 'The scraping service is not properly configured.');
+			} else {
+				toast.error('Failed to start download', errorMessage);
+			}
 		}
 	}
 </script>
