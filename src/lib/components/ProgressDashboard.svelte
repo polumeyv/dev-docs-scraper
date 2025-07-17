@@ -75,7 +75,7 @@
 		<article class="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
 			<header class="flex items-center justify-between mb-6">
 				<h2>Progress Dashboard</h2>
-				<button type="button" class="btn-ghost" on:click={handleClose}>
+				<button type="button" class="bg-transparent text-neutral-700 hover:bg-neutral-100 focus:ring-neutral-500 dark:text-neutral-300 dark:hover:bg-neutral-800" on:click={handleClose}>
 					<span class="sr-only">Close</span>
 					<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -83,7 +83,7 @@
 				</button>
 			</header>
 			
-			<div class="card-content">
+			<div class="space-y-4">
 				<!-- Progress Bar -->
 				<div class="w-full bg-neutral-200 rounded-full h-2 dark:bg-neutral-700">
 					<div 
@@ -101,7 +101,7 @@
 				<!-- Stages -->
 				<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
 					{#each stages as stage, index}
-						<div class="panel text-center">
+						<article class="text-center">
 							<div class="text-2xl mb-2">{stage.icon}</div>
 							<h4>{stage.name}</h4>
 							<small class={
@@ -113,15 +113,15 @@
 								 stages.findIndex(s => s.id === progressData.stage) > index ? 'Complete' :
 								 'Pending'}
 							</small>
-						</div>
+						</article>
 					{/each}
 				</div>
 				
 				{#if progressData.error}
-					<div class="panel bg-red-50 border-red-200 dark:bg-red-900/20 dark:border-red-800">
+					<article class="bg-red-50 border-red-200 dark:bg-red-900/20 dark:border-red-800">
 						<h4 class="text-red-800 dark:text-red-200">Error</h4>
 						<p class="text-red-600 dark:text-red-300">{progressData.error}</p>
-					</div>
+					</article>
 				{/if}
 			</div>
 		</article>
