@@ -1,0 +1,25 @@
+{
+  "url": "https://svelte.dev/tutorial",
+  "title": "Introduction / Welcome to Svelte • Svelte Tutorial",
+  "content": "## Welcome to the Svelte Tutorial!\n\nThis tutorial teaches you to build web applications of all sizes, with high performance and a small footprint. You can also consult the API docs and visit the playground, or create a project with `npx sv create`.\n\n### What is Svelte?\n\nSvelte is a compiler for building web applications.  Like other UI frameworks, it lets you build declaratively using components combining markup, styles, and behavior. These components are compiled.\n\n### Basic Svelte Introduction\n\n* **Components:** Building blocks of your application.\n* **Dynamic Attributes:** Adding dynamic behavior to HTML elements.\n* **Styling:** Styling components with CSS.\n* **Nested Components:** Creating complex UIs by combining components.\n* **HTML Tags:** Using standard HTML within components.\n* **Reactivity:**  How Svelte automatically updates the UI based on changes to data.\n* **State:** Managing application data (Deep State, Derived State).\n* **Inspecting State:** Tools for debugging and understanding your application's data.\n* **Effects:** Running code in response to state changes.\n* **Universal Reactivity:**  Reactivity that works regardless of where your component is rendered.\n* **Props:** Passing data to components.\n* **Logic:** Conditional rendering using `if`, `else if`, and `else` blocks.\n* **Loops:** Iterating over data using `each` blocks (including keyed `each`).\n* **Asynchronous Operations:** Handling asynchronous data with `await` blocks.\n* **Events:** Handling DOM and component events.\n* **Bindings:** Two-way data binding with input elements (text, numeric, checkbox, select, group, textarea).\n* **Classes and Styles:** Dynamically adding CSS classes and styles.\n* **Actions:** Adding custom behavior to elements using the `use` directive.\n* **Transitions:** Adding smooth animations to element appearances and disappearances.\n\n### Advanced Svelte\n\n* **Advanced Reactivity:**  Advanced techniques for managing reactivity.\n* **Raw State:** Working directly with state without Svelte's reactivity system (for performance optimization).\n* **Reactive Classes:** Adding and removing classes based on reactive values.\n* **Getters and Setters:** Creating custom reactive properties.\n* **Reactive Built-ins:** Svelte's built-in reactive functionalities.\n* **Stores:** Centralized state management using stores.\n* **Reusing Content:** Using snippets and render tags.\n* **Motion:** Creating animations using `tweened` values and `springs`.\n* **Advanced Bindings:** More complex binding scenarios (contenteditable, each block, media elements, `this` component, binding to component instances).\n* **Advanced Transitions:** Deferred transitions.\n* **Animations:** Creating sophisticated animations.\n* **Context API:** Sharing data across components.\n* **Special Elements:** `<svelte:window>`, `<svelte:document>`, `<svelte:body>`, `<svelte:head>`, `<svelte:element>`, `<svelte:boundary>`, `<script module>` for code sharing and exports.\n\n### Basic SvelteKit Introduction\n\n* **What is SvelteKit?:**  Svelte's framework for building web applications.\n* **Routing:** Defining routes for your application.\n* **Pages & Layouts:**  Structuring your application's UI.\n* **Route Parameters:** Accessing data from the URL.\n* **Data Loading:** Fetching data for your pages and layouts.\n* **Headers and Cookies:** Managing HTTP headers and cookies.\n* **Shared Modules:** Sharing code between pages.\n* **Forms:** Handling form submissions and validation.\n* **API Routes:** Creating serverless functions.\n* **Error Handling & Redirects:** Handling errors and redirects.\n\n### Advanced SvelteKit\n\n* **Hooks:** Extending SvelteKit's functionality.\n* **Advanced Routing:** Optional parameters, rest parameters, param matchers, route groups.\n* **Advanced Loading:** Universal load functions, using parent data, invalidation, custom dependencies.\n* **Environment Variables:** Accessing environment variables.\n\n### Conclusion\n\nNext steps...",
+  "codeBlocks": [],
+  "headings": [
+    {
+      "level": 2,
+      "text": "What is Svelte?"
+    },
+    {
+      "level": 2,
+      "text": "How to use this tutorial"
+    }
+  ],
+  "summary": "This Svelte tutorial provides a comprehensive guide to building web applications using Svelte, covering fundamental concepts like components, reactivity, and state management, as well as advanced topics such as transitions, animations, and SvelteKit.  It's designed to help developers of all levels build high-performance, small-footprint web applications.",
+  "keypoints": [
+    "Basic Svelte: Components, Reactivity, State (Deep, Derived), Events, Bindings, Styling",
+    "Advanced Svelte: Actions, Transitions, Animations, Stores, Context API, Advanced Bindings",
+    "SvelteKit: Routing, Layouts, Data Loading, Server-Side Rendering (SSR), API Routes, Error Handling"
+  ],
+  "scrapedAt": "2025-07-17T03:09:16.447Z",
+  "category": "Core Svelte Concepts and Tutorials",
+  "priority": "high"
+}

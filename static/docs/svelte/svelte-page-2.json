@@ -1,0 +1,33 @@
+{
+  "url": "https://svelte.dev/docs/svelte",
+  "title": "Overview • Docs • Svelte",
+  "content": "Svelte is a radical new approach to building user interfaces.  Instead of using a virtual DOM like other frameworks (React, Vue, Angular), Svelte compiles your code at build time into small, highly optimized vanilla JavaScript.  This means less code to download and faster initial load times.  You write your components in HTML, CSS, and JavaScript – the same tools you already know – and Svelte takes care of the rest.\n\nYou can use Svelte to build anything on the web, from small interactive components to ambitious full-stack applications using SvelteKit, its companion application framework. \n\nFor beginners, we recommend starting with the interactive tutorial. This documentation serves as a reference for more advanced topics.",
+  "codeBlocks": [
+    {
+      "language": "javascript",
+      "code": "function greet() {\n  alert('Welcome to Svelte!');\n}\n\n<button onclick={greet}>click me</button>\n\n<style>\n  button {\n    font-size: 2em;\n  }\n</style>"
+    },
+    {
+      "language": "typescript",
+      "code": "function greet() {\n  alert('Welcome to Svelte!');\n}\n\n<button onclick={greet}>click me</button>\n\n<style>\n  button {\n    font-size: 2em;\n  }\n</style>"
+    }
+  ],
+  "headings": [
+    {
+      "level": 3,
+      "text": "On this page"
+    }
+  ],
+  "summary": "Svelte is a compiler-based web framework that transforms declarative components written in HTML, CSS, and JavaScript into highly optimized JavaScript code.  It allows building anything from small components to full-stack applications using SvelteKit, offering a lean and performant alternative to traditional frameworks.",
+  "keypoints": [
+    "Compiler-based: Transpiles components into efficient JavaScript.",
+    "Declarative programming:  Build UIs using HTML, CSS, and JavaScript in a declarative style.",
+    "Component-based architecture: Create reusable UI components.",
+    "Optimized performance:  Produces highly optimized code for faster applications.",
+    "Full-stack capabilities (with SvelteKit): Enables building complete applications, including server-side rendering and routing.",
+    "Lean and lightweight:  Small bundle sizes, leading to faster load times."
+  ],
+  "scrapedAt": "2025-07-17T03:09:21.591Z",
+  "category": "Core Svelte Concepts and Tutorials",
+  "priority": "high"
+}
