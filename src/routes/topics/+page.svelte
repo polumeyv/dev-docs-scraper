@@ -196,7 +196,7 @@
 <div class="min-h-screen bg-[var(--color-bg-primary)]">
 	<!-- Header -->
 	<header class="border-b border-neutral-200 dark:border-neutral-800">
-		<div class="max-w-4xl mx-auto px-4 py-4 flex items-center gap-4">
+		<div class="max-w-4xl mx-auto px-4 py-2">
 			<button
 				onclick={() => goto('/')}
 				class="p-2 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
@@ -204,7 +204,6 @@
 			>
 				<ArrowLeft size={20} />
 			</button>
-			<h1 class="text-xl font-medium">Select Documentation Topic</h1>
 		</div>
 	</header>
 	

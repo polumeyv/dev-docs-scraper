@@ -7,9 +7,7 @@
 		ExternalLink, 
 		FolderPlus, 
 		ChevronDown,
-		Sparkles,
-		Code2,
-		BookOpen
+		Code2
 	} from 'lucide-svelte';
 	
 	// UI Components
@@ -214,26 +212,10 @@
 <div class="min-h-screen bg-[var(--color-bg-primary)]">
 	<!-- Header -->
 	<header class="border-b bg-[var(--color-bg-secondary)]">
-		<div class="container mx-auto px-4 py-4">
-			<div class="flex items-center justify-between">
-				<div class="flex items-center gap-3">
-					<div class="rounded-lg bg-emerald-500 p-2">
-						<BookOpen size={24} class="text-white" />
-					</div>
-					<div>
-						<h1 class="text-xl font-semibold text-[var(--color-text-primary)]">
-							DevDocs Scraper
-						</h1>
-						<p class="text-sm text-[var(--color-text-secondary)]">
-							Search and download documentation for any framework
-						</p>
-					</div>
-				</div>
-				
-				<div class="flex items-center gap-4">
-					<ConnectionStatus />
-					<ThemeToggle />
-				</div>
+		<div class="container mx-auto px-4 py-2">
+			<div class="flex items-center justify-end gap-4">
+				<ConnectionStatus />
+				<ThemeToggle />
 			</div>
 		</div>
 	</header>
@@ -241,16 +223,7 @@
 	<!-- Main Content -->
 	<main class="container mx-auto px-4 py-8">
 		<!-- Search Section -->
-		<div class="mb-12 text-center">
-			<div class="mb-8">
-				<h2 class="mb-2 text-3xl font-bold text-[var(--color-text-primary)]">
-					Find Documentation Instantly
-				</h2>
-				<p class="text-lg text-[var(--color-text-secondary)]">
-					Search for any framework, library, or tool
-				</p>
-			</div>
-			
+		<div class="mb-12">
 			<div class="mx-auto max-w-2xl space-y-4">
 				<form onsubmit={(e) => { e.preventDefault(); searchDocumentation(); }}>
 					<div class="flex gap-3">
@@ -447,30 +420,6 @@
 			</div>
 		{/if}
 		
-		<!-- Empty State -->
-		{#if !loading && !searchResults && recentSearches.length === 0}
-			<div class="mx-auto max-w-md text-center">
-				<div class="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-emerald-500/10">
-					<Sparkles size={40} class="text-emerald-500" />
-				</div>
-				<h3 class="mb-2 text-xl font-semibold text-[var(--color-text-primary)]">
-					Start Your Search
-				</h3>
-				<p class="mb-6 text-[var(--color-text-secondary)]">
-					Search for any framework or library to find and download its documentation
-				</p>
-				<div class="flex flex-wrap justify-center gap-2">
-					{#each popularFrameworks.slice(0, 5) as framework}
-						<button
-							onclick={() => { searchQuery = framework; searchDocumentation(); }}
-							class="rounded-full bg-neutral-100 px-3 py-1 text-sm text-neutral-700 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700"
-						>
-							{framework}
-						</button>
-					{/each}
-				</div>
-			</div>
-		{/if}
 	</main>
 </div>
 
