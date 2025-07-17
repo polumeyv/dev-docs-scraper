@@ -1,24 +1,68 @@
 import { json } from '@sveltejs/kit';
 import { ScraperService } from '$lib/server/scraperService';
 import { IntelligentScraperService } from '$lib/server/intelligentScraperService';
-import { validateConfig } from '$lib/server/config';
+import { 
+	validateConfig, 
+	createErrorResponse, 
+	createSuccessResponse,
+	validateRequired,
+	validateString,
+	validateUrl,
+	collectValidationErrors
+} from '$lib/server/config';
 import { v4 as uuidv4 } from 'uuid';
 import { taskEvents, activeTasks, cleanupTask } from '$lib/server/taskEvents';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request }) => {
 	try {
-		// Validate configuration
+		// Validate configuration first
 		validateConfig();
 
-		const data = await request.json();
+		// Parse and validate request body
+		let data;
+		try {
+			data = await request.json();
+		} catch (parseError) {
+			return createErrorResponse(
+				'Invalid JSON in request body',
+				parseError instanceof Error ? parseError.message : 'Request body must be valid JSON',
+				400
+			);
+		}
+
 		const url = data.url?.trim();
 		const framework = data.framework?.trim();
 		const topicName = data.topic_name?.trim();
-		const mode = data.mode || 'intelligent'; // 'intelligent' or 'basic'
+		const mode = data.mode || 'intelligent';
 
-		if (!url || !framework) {
-			return json({ error: 'URL and framework are required' }, { status: 400 });
+		// Validate request parameters
+		const validation = collectValidationErrors(
+			validateRequired(url, 'url'),
+			validateString(url, 'url'),
+			url ? validateUrl(url, 'url') : null,
+			validateRequired(framework, 'framework'),
+			validateString(framework, 'framework'),
+			validateString(topicName, 'topic_name'),
+			validateString(mode, 'mode')
+		);
+
+		if (!validation.isValid) {
+			const errorDetails = validation.errors.map(e => `${e.field}: ${e.message}`).join(', ');
+			return createErrorResponse(
+				'Request validation failed',
+				errorDetails,
+				400
+			);
+		}
+
+		// Validate mode parameter
+		if (mode && !['intelligent', 'basic'].includes(mode)) {
+			return createErrorResponse(
+				'Invalid mode parameter',
+				'Mode must be either "intelligent" or "basic"',
+				400
+			);
 		}
 
 		// Create task
@@ -44,20 +88,30 @@ export const POST: RequestHandler = async ({ request }) => {
 			runBasicScraping(taskId, url, framework);
 		}
 
-		return json({
-			task_id: taskId,
-			message: 'Scraping started'
-		});
+		return createSuccessResponse(
+			{
+				task_id: taskId,
+				task
+			},
+			'Scraping started successfully'
+		);
 
 	} catch (error) {
 		console.error('Error starting scrape:', error);
 		
-		return json(
-			{ 
-				error: 'Failed to start scraping',
-				details: error instanceof Error ? error.message : 'Unknown error'
-			}, 
-			{ status: 500 }
+		// Handle configuration errors specifically
+		if (error instanceof Error && error.message.includes('PRIVATE_GEMINI_API_KEY')) {
+			return createErrorResponse(
+				'Configuration error',
+				'API service not properly configured. Please check server configuration.',
+				503
+			);
+		}
+		
+		return createErrorResponse(
+			'Failed to start scraping',
+			error instanceof Error ? error.message : 'An unexpected error occurred',
+			500
 		);
 	}
 };
@@ -125,17 +179,43 @@ async function runIntelligentScraping(
 
 // GET endpoint to check task status
 export const GET: RequestHandler = async ({ url }) => {
-	const taskId = url.searchParams.get('task_id');
-	
-	if (!taskId) {
-		return json({ error: 'task_id parameter required' }, { status: 400 });
-	}
+	try {
+		const taskId = url.searchParams.get('task_id');
+		
+		// Validate required parameter
+		const validation = collectValidationErrors(
+			validateRequired(taskId, 'task_id'),
+			validateString(taskId, 'task_id')
+		);
 
-	const task = activeTasks.get(taskId);
-	
-	if (!task) {
-		return json({ error: 'Task not found' }, { status: 404 });
-	}
+		if (!validation.isValid) {
+			const errorDetails = validation.errors.map(e => `${e.field}: ${e.message}`).join(', ');
+			return createErrorResponse(
+				'Request validation failed',
+				errorDetails,
+				400
+			);
+		}
 
-	return json(task);
+		const task = activeTasks.get(taskId!);
+		
+		if (!task) {
+			return createErrorResponse(
+				'Task not found',
+				`No active task found with ID: ${taskId}`,
+				404
+			);
+		}
+
+		return createSuccessResponse(task, 'Task status retrieved successfully');
+
+	} catch (error) {
+		console.error('Error retrieving task status:', error);
+		
+		return createErrorResponse(
+			'Failed to retrieve task status',
+			error instanceof Error ? error.message : 'An unexpected error occurred',
+			500
+		);
+	}
 };
