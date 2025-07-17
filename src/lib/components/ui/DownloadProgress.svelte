@@ -10,7 +10,7 @@
 	
 	let { task }: Props = $props();
 	
-	function getStatusIcon() {
+	let StatusIcon = $derived(() => {
 		switch (task.status) {
 			case 'queued':
 				return Loader2;
@@ -23,7 +23,7 @@
 			default:
 				return Download;
 		}
-	}
+	});
 	
 	function getStatusColor() {
 		switch (task.status) {
@@ -54,8 +54,7 @@
 	<div class="mb-3 flex items-start justify-between">
 		<div class="flex-1">
 			<div class="flex items-center gap-2">
-				<svelte:component 
-					this={getStatusIcon()} 
+				<StatusIcon 
 					size={16} 
 					class={`${getStatusColor()} ${task.status === 'in_progress' ? 'animate-spin' : ''}`} 
 				/>
@@ -98,7 +97,7 @@
 				<div 
 					class="absolute left-0 top-0 h-full bg-emerald-500 transition-all duration-300 ease-out"
 					style="width: {task.progress}%"
-				/>
+				></div>
 			</div>
 		</div>
 	{/if}
