@@ -30,7 +30,14 @@ export const GET: RequestHandler = async () => {
 			: { 
 				isHealthy: false, 
 				error: geminiStatus.reason?.message || 'Unknown error',
-				failures: 999
+				failures: 999,
+				circuitBreakerOpen: true,
+				lastFailureTime: new Date().toISOString(),
+				config: {
+					maxRetries: 0,
+					requestTimeout: 0,
+					failureThreshold: 0
+				}
 			};
 
 		// Process DocSearch status

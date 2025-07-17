@@ -60,7 +60,7 @@ export class IntelligentDocFinder {
 			throw new Error('Circuit breaker is open - Gemini API temporarily unavailable');
 		}
 
-		let lastError: Error;
+		let lastError: Error | null = null;
 
 		for (let attempt = 0; attempt < config.maxRetries; attempt++) {
 			try {
@@ -106,7 +106,7 @@ export class IntelligentDocFinder {
 		}
 
 		this.recordFailure();
-		throw new Error(`Gemini API failed after ${config.maxRetries} attempts. Last error: ${lastError.message}`);
+		throw new Error(`Gemini API failed after ${config.maxRetries} attempts. Last error: ${lastError?.message || 'Unknown error'}`);
 	}
 
 	async findOfficialDocumentation(framework: string): Promise<any> {

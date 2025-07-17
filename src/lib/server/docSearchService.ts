@@ -43,8 +43,8 @@ export class DocSearchService {
 		return new Promise(resolve => setTimeout(resolve, ms));
 	}
 
-	private async fetchWithRetry(url: string, options: RequestInit = {}, maxRetries = 2): Promise<Response> {
-		let lastError: Error;
+	private async fetchWithRetry(url: string, options: RequestInit & { timeout?: number } = {}, maxRetries = 2): Promise<Response> {
+		let lastError: Error | null = null;
 
 		for (let attempt = 0; attempt < maxRetries + 1; attempt++) {
 			try {
@@ -55,10 +55,12 @@ export class DocSearchService {
 				}
 
 				const controller = new AbortController();
-				const timeoutId = setTimeout(() => controller.abort(), options.timeout || config.requestTimeout);
+				const timeout = options.timeout || config.requestTimeout;
+				const timeoutId = setTimeout(() => controller.abort(), timeout);
 
+				const { timeout: _, ...fetchOptions } = options; // Remove timeout from options
 				const response = await fetch(url, {
-					...options,
+					...fetchOptions,
 					signal: controller.signal
 				});
 
@@ -81,7 +83,7 @@ export class DocSearchService {
 			}
 		}
 
-		throw new Error(`Fetch failed after ${maxRetries + 1} attempts: ${lastError.message}`);
+		throw new Error(`Fetch failed after ${maxRetries + 1} attempts: ${lastError?.message || 'Unknown error'}`);
 	}
 
 	async searchDocumentation(framework: string): Promise<SearchResult[]> {
@@ -139,20 +141,25 @@ export class DocSearchService {
 
 		// Sort results: successful results first (by priority), then errors
 		const sortedResults = searchResults.sort((a, b) => {
+			const aHasUrl = 'url' in a && !!a.url;
+			const bHasUrl = 'url' in b && !!b.url;
+			
 			// Successful results first
-			if (a.url && !b.url) return -1;
-			if (!a.url && b.url) return 1;
+			if (aHasUrl && !bHasUrl) return -1;
+			if (!aHasUrl && bHasUrl) return 1;
 			
 			// Both successful: sort by priority
-			if (a.url && b.url) {
-				return (b.priority || 0) - (a.priority || 0);
+			if (aHasUrl && bHasUrl) {
+				const aPriority = 'priority' in a ? Number(a.priority || 0) : 0;
+				const bPriority = 'priority' in b ? Number(b.priority || 0) : 0;
+				return bPriority - aPriority;
 			}
 			
 			// Both failures: maintain order
 			return 0;
 		});
 
-		console.log(`📊 Search completed: ${sortedResults.filter(r => r.url).length} successful, ${sortedResults.filter(r => r.error).length} failed`);
+		console.log(`📊 Search completed: ${sortedResults.filter(r => 'url' in r && !!r.url).length} successful, ${sortedResults.filter(r => 'error' in r && !!r.error).length} failed`);
 		
 		return sortedResults;
 	}
