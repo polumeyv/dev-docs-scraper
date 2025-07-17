@@ -1,0 +1,38 @@
+{
+  "url": "https://svelte.dev/docs/kit",
+  "title": "Introduction • Docs • Svelte",
+  "content": "## Introduction to Svelte and SvelteKit\n\nIf you're new to Svelte or SvelteKit, we recommend starting with the interactive tutorial.  For assistance, join the Discord chatroom.\n\n### What is Svelte?\n\nSvelte is a compiler that transforms your UI components (like navigation bars or forms) into highly optimized JavaScript and CSS.  This allows for efficient rendering in the browser. While you don't need to know Svelte to understand this guide, familiarity will be helpful.  Learn more with the Svelte tutorial.\n\n### What is SvelteKit?\n\nSvelteKit is a framework for building complete web applications using Svelte.  It provides a structured approach to development, offering features comparable to Next.js (React) or Nuxt.js (Vue).  To explore the types of applications possible, refer to the project types documentation.\n\n### SvelteKit vs. Svelte\n\nSvelte excels at rendering UI components.  While you can build entire pages with Svelte alone, creating a full-fledged application requires more. SvelteKit addresses this by providing essential tools and best practices for building modern web apps.\n\nSvelteKit handles many complexities automatically, including:\n\n* Routing (UI updates on link clicks)\n* Build optimizations (loading only necessary code)\n* Offline support\n* Page preloading\n* Configurable rendering (SSR, client-side rendering, prerendering)\n* Image optimization\n\nThis framework significantly simplifies the development process, allowing you to focus on creativity.  The use of Vite with a Svelte plugin enables Hot Module Replacement (HMR), providing an exceptionally fast and responsive development experience.",
+  "codeBlocks": [],
+  "headings": [
+    {
+      "level": 3,
+      "text": "On this page"
+    },
+    {
+      "level": 2,
+      "text": "Before we begin"
+    },
+    {
+      "level": 2,
+      "text": "What is SvelteKit?"
+    },
+    {
+      "level": 2,
+      "text": "What is Svelte?"
+    },
+    {
+      "level": 2,
+      "text": "SvelteKit vs Svelte"
+    }
+  ],
+  "summary": "This document introduces Svelte and SvelteKit, explaining their roles in web application development. Svelte is a compiler that transforms UI components into optimized JavaScript and CSS, while SvelteKit is a framework built on Svelte that simplifies building robust, performant web applications with modern best practices.",
+  "keypoints": [
+    "Svelte compiles UI components into optimized JavaScript and CSS for efficient rendering.",
+    "SvelteKit is a framework for building full web applications using Svelte, offering features like routing, SSR, and build optimizations.",
+    "SvelteKit simplifies development by handling complex tasks like code splitting, offline support, and image optimization.",
+    "SvelteKit provides a fast development experience with Hot Module Replacement (HMR)."
+  ],
+  "scrapedAt": "2025-07-17T03:09:40.459Z",
+  "category": "Svelte Ecosystem Tools",
+  "priority": "medium"
+}

@@ -10,6 +10,7 @@ import {
 	collectValidationErrors
 } from '$lib/server/config';
 import { progressTracker } from '$lib/server/progressTracker';
+import { taskEvents } from '$lib/server/taskEvents';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request }) => {
@@ -56,10 +57,12 @@ export const POST: RequestHandler = async ({ request }) => {
 		let progressCallback;
 		if (taskId) {
 			progressCallback = async (id: string, update: any) => {
-				// This will be handled by the SSE endpoint
-				// For now, we'll emit to a global event emitter
-				// that the SSE endpoint can listen to
-				console.log(`Task ${id} update:`, update);
+				// Emit progress updates via SSE to connected clients
+				taskEvents.emit(id, {
+					type: 'task_update',
+					...update,
+					timestamp: new Date().toISOString()
+				});
 			};
 		}
 

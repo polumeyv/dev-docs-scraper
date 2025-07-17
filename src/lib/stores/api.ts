@@ -31,6 +31,7 @@ function createApiStore() {
 	// Request management
 	const activeRequests = new Set<AbortController>();
 	
+	
 	// API helper function with timeout and error handling
 	async function apiRequest(url: string, options: RequestInit = {}) {
 		const controller = new AbortController();
@@ -289,6 +290,16 @@ function createApiStore() {
 }
 
 export const api = createApiStore();
+
+// Browser cleanup - ensure cleanup on page unload to prevent memory leaks
+if (typeof window !== 'undefined') {
+	const handleBeforeUnload = () => {
+		api.cleanup();
+	};
+	
+	window.addEventListener('beforeunload', handleBeforeUnload);
+	window.addEventListener('pagehide', handleBeforeUnload);
+}
 
 // Derived stores for easier access
 export const activeTasks = derived(api, $api => $api.activeTasks);

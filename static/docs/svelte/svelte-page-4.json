@@ -1,0 +1,21 @@
+{
+  "url": "https://svelte.dev/playground",
+  "title": "Hello world • Playground • Svelte",
+  "content": "## Hello World and Beyond: A Svelte Guide\n\nThis guide provides a concise overview of Svelte's core features.  We'll cover everything from creating your first Svelte application to working with advanced concepts like stores, transitions, and actions.\n\n**Fundamentals:**\n\n* **Introduction:** Creating your first Svelte application.\n* **Dynamic attributes:** Adding dynamic behavior to your components.\n* **Styling:** Styling your components with CSS.\n* **Nested components:** Building complex UIs from smaller components.\n* **HTML tags:** Working with standard HTML elements within your Svelte components.\n* **Reactivity:** Managing data changes efficiently (reactive assignments, declarations, statements).\n* **Props:** Passing data to components (declaring props, default values, spread props).\n* **Logic:** Conditional rendering using `if`, `else`, and `else if` blocks.\n* **Loops:** Iterating with `each` blocks (including keyed each).\n* **Asynchronous Operations:** Handling asynchronous data with `await` blocks.\n* **Events:** Handling DOM events and component events (inline handlers, event forwarding).\n* **Bindings:** Connecting component data to UI elements (text inputs, numeric inputs, checkboxes, group inputs, textareas, file inputs, select inputs).\n* **Media Elements:** Working with media elements and binding their properties.\n* **Component Bindings:** Binding directly to components (`bind:this`).\n\n**Advanced Concepts:**\n\n* **Component Lifecycle:** Managing component initialization and cleanup (`onMount`, `onDestroy`, `tick`).\n* **Stores:** Managing application state using writable, readable, derived, and custom stores.\n* **Motion:** Adding smooth transitions and animations using `tweened`, `spring`, and custom transitions.\n* **Transitions:** Applying transitions to elements entering and leaving the DOM.\n* **Animations:** Animating elements with the `animate` directive.\n* **Actions:** Adding custom behaviors to elements using actions.\n* **Classes:** Applying classes conditionally using the `class` directive.\n* **Component Composition:** Creating reusable components and composing them together.\n* **Render Props:** Implementing complex UI logic using render props.\n* **Context API:** Sharing data between components using `setContext` and `getContext`.\n* **Special Elements:** Using `<svelte:element>`, `<svelte:window>`, `<svelte:document>`, `<svelte:body>`, and `<svelte:head>`.\n* **Module Context:** Organizing and exporting components from your modules.\n* **Debugging:** Using the `@debug` tag for debugging.\n\n**Example Applications:**\n\n* 7GUIs (Counter, Temperature Converter, Flight Booker, Timer, CRUD)\n* Circle Drawer\n* Recursive Components\n* Dynamic Components\n* Hacker News (log in)",
+  "codeBlocks": [],
+  "headings": [],
+  "summary": "This Svelte documentation page provides a comprehensive overview of Svelte's core features, from basic concepts like creating a 'Hello World' app to advanced topics such as reactivity, component lifecycle, stores, transitions, animations, and actions.  It serves as a quick reference guide for developers learning or using Svelte.",
+  "keypoints": [
+    "Fundamentals: Reactivity, component creation, and basic HTML integration.",
+    "Component Lifecycle: `onMount`, `onDestroy`, `tick`.",
+    "Data Management: Stores (writable, readable, derived, custom).",
+    "User Interaction: Events, bindings (various input types), event forwarding.",
+    "Advanced Features: Transitions, animations, actions, context API.",
+    "Component Composition and Reusability: Render props, nested components.",
+    "Special Elements: `<svelte:element>`, `<svelte:window>`, `<svelte:document>`, etc.",
+    "Debugging:  The `@debug` tag."
+  ],
+  "scrapedAt": "2025-07-17T03:09:34.914Z",
+  "category": "Interactive Svelte Examples",
+  "priority": "medium"
+}
