@@ -1,5 +1,5 @@
 import { PRIVATE_GEMINI_API_KEY } from '$env/static/private';
-import { PUBLIC_ENV, PUBLIC_API_URL } from '$env/static/public';
+import { PUBLIC_ENV, PUBLIC_API_URL, PUBLIC_API_HOST, PUBLIC_API_PORT, PUBLIC_API_PROTOCOL } from '$env/static/public';
 import { json } from '@sveltejs/kit';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import type { APIError, ValidationError, ValidationResult } from '$lib/types/api';
@@ -7,17 +7,31 @@ import type { APIError, ValidationError, ValidationResult } from '$lib/types/api
 // Environment configuration
 const environment = PUBLIC_ENV || 'development';
 
+// Build API URL from components if PUBLIC_API_URL is not provided
+function buildApiUrl(): string {
+	if (PUBLIC_API_URL) {
+		return PUBLIC_API_URL;
+	}
+
+	const protocol = PUBLIC_API_PROTOCOL || (environment === 'production' ? 'https' : 'http');
+	const host = PUBLIC_API_HOST || (environment === 'production' ? 'docs-scraper.com' : 'localhost');
+	const port = PUBLIC_API_PORT || (environment === 'production' ? '' : '5173');
+	
+	const portSuffix = port && port !== '80' && port !== '443' ? `:${port}` : '';
+	return `${protocol}://${host}${portSuffix}`;
+}
+
 export const config = {
 	geminiApiKey: PRIVATE_GEMINI_API_KEY,
 	environment,
-	apiUrl: PUBLIC_API_URL || 'http://localhost:5173',
-	maxRetries: 3,
+	apiUrl: buildApiUrl(),
+	maxRetries: environment === 'production' ? 5 : 3,
 	requestTimeout: environment === 'production' ? 45000 : 30000, // 45s prod, 30s dev
-	connectivityTimeout: 10000, // 10 seconds for connectivity tests
+	connectivityTimeout: environment === 'production' ? 15000 : 10000, // 15s prod, 10s dev
 	maxConcurrentRequests: environment === 'production' ? 10 : 5,
 	circuitBreakerConfig: {
-		failureThreshold: 5,
-		resetTimeout: 60000, // 1 minute
+		failureThreshold: environment === 'production' ? 10 : 5,
+		resetTimeout: environment === 'production' ? 120000 : 60000, // 2min prod, 1min dev
 		monitoringPeriod: 30000 // 30 seconds
 	}
 };
