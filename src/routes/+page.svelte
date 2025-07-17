@@ -91,6 +91,12 @@
 			}
 			
 			const data = await response.json();
+			
+			// Check if we have valid data
+			if (!data.links || !Array.isArray(data.links)) {
+				throw new Error(data.error || 'Invalid response format');
+			}
+			
 			searchResults = {
 				framework: searchQuery,
 				links: data.links,
@@ -127,10 +133,16 @@
 			const response = await fetch('/api/folders');
 			if (response.ok) {
 				const data = await response.json();
-				availableFolders = data.folders.map((f: any) => f.name);
+				if (data.folders && Array.isArray(data.folders)) {
+					availableFolders = data.folders.map((f: any) => f.name);
+				}
+			} else {
+				console.warn('Failed to load folders:', response.status);
 			}
 		} catch (err) {
 			console.error('Failed to load folders:', err);
+			// Initialize with default folder if API fails
+			availableFolders = ['documentation'];
 		}
 	}
 	
