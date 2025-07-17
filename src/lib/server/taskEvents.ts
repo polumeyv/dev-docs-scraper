@@ -31,3 +31,12 @@ export const taskEvents = new TaskEventEmitter();
 
 // Store active tasks (in production, use Redis or database)
 export const activeTasks = new Map<string, any>();
+
+// Clean up completed tasks after 5 minutes
+export function cleanupTask(taskId: string, delay = 300000) {
+	setTimeout(() => {
+		activeTasks.delete(taskId);
+		// Clean up any remaining listeners
+		taskEvents.emit(taskId, { type: 'cleanup', status: 'removed' });
+	}, delay);
+}

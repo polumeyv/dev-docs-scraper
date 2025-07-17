@@ -20,13 +20,27 @@ export const GET: RequestHandler = async ({ url, request }) => {
 	// Create a readable stream for SSE
 	const stream = new ReadableStream({
 		start(controller) {
+			let closed = false;
+
+			// Helper to safely enqueue data
+			const safeEnqueue = (data: string) => {
+				if (!closed) {
+					try {
+						controller.enqueue(new TextEncoder().encode(data));
+					} catch (error) {
+						console.error('Failed to enqueue SSE data:', error);
+						closed = true;
+					}
+				}
+			};
+
 			// Send initial connection event
 			const initialData = `data: ${JSON.stringify({ 
 				type: 'connected', 
 				taskId, 
 				timestamp: new Date().toISOString() 
 			})}\n\n`;
-			controller.enqueue(new TextEncoder().encode(initialData));
+			safeEnqueue(initialData);
 
 			// Set up task update listener
 			const updateListener = (data: any) => {
@@ -36,26 +50,35 @@ export const GET: RequestHandler = async ({ url, request }) => {
 					...data,
 					timestamp: new Date().toISOString()
 				})}\n\n`;
-				controller.enqueue(new TextEncoder().encode(eventData));
+				safeEnqueue(eventData);
 			};
 
 			taskEvents.subscribe(taskId, updateListener);
 
 			// Set up heartbeat to keep connection alive
 			const heartbeat = setInterval(() => {
-				const heartbeatData = `data: ${JSON.stringify({ 
-					type: 'heartbeat', 
-					timestamp: new Date().toISOString() 
-				})}\n\n`;
-				controller.enqueue(new TextEncoder().encode(heartbeatData));
+				if (!closed) {
+					const heartbeatData = `data: ${JSON.stringify({ 
+						type: 'heartbeat', 
+						timestamp: new Date().toISOString() 
+					})}\n\n`;
+					safeEnqueue(heartbeatData);
+				}
 			}, 30000); // Send heartbeat every 30 seconds
 
 			// Clean up on close
-			request.signal.addEventListener('abort', () => {
+			const cleanup = () => {
+				closed = true;
 				clearInterval(heartbeat);
 				taskEvents.unsubscribe(taskId, updateListener);
-				controller.close();
-			});
+				try {
+					controller.close();
+				} catch (error) {
+					// Controller might already be closed
+				}
+			};
+
+			request.signal.addEventListener('abort', cleanup);
 		}
 	});
 

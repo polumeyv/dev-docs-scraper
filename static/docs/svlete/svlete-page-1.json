@@ -1,0 +1,28 @@
+{
+  "url": "https://svelte.dev/tutorial",
+  "title": "Introduction / Welcome to Svelte • Svelte Tutorial",
+  "content": "## Svelte Tutorial: Building High-Performance Web Applications\n\nThis tutorial will guide you through building web applications using Svelte, a compiler-based framework known for its performance and small bundle sizes.  We'll cover both fundamental and advanced concepts to help you build applications of any size.\n\n### Basic Svelte Introduction\n\n**What is Svelte?**\n\nSvelte is a radical new approach to building user interfaces. Unlike traditional frameworks (like React or Vue) that manipulate the DOM in the browser, Svelte compiles your code into small, highly-optimized vanilla JavaScript that updates the DOM directly. This leads to improved performance and smaller bundle sizes.\n\n**Key Concepts:**\n\n* **Components:** The building blocks of your Svelte application. They encapsulate markup, styles, and behavior.\n* **Reactivity:** Svelte automatically updates the DOM when your data changes. You write declarative code, and Svelte handles the updates.\n* **State:** Variables that hold data in your components.\n* **Props:** Data passed down from parent components to child components.\n* **Events:** User interactions that trigger actions in your application.\n* **Bindings:**  Connecting component data to DOM elements.\n* **Actions:** Reusable behaviors applied to DOM elements.\n* **Transitions:**  Animated changes to the DOM.\n* **Stores:** A way to manage application-level state.\n\n**Component Structure:**\n\nSvelte components are self-contained units. They typically include:\n\n* **Markup:** HTML that describes the component's structure.\n* **Styles:** CSS styles specific to the component.\n* **JavaScript:** Logic that governs the component's behavior.\n\n**Example:**\n\n```svelte\n<script>\n  let count = 0;\n</script>\n\n<h1>Hello Svelte!</h1>\n<p>You've clicked {count} times.</p>\n<button on:click={() => count += 1}>Click me</button>\n```\n\n### Advanced Svelte\n\nThis section delves into more advanced Svelte features including advanced reactivity techniques, stores for state management, and using component actions and transitions for improved UX.\n\n### SvelteKit Introduction\n\n**What is SvelteKit?**\n\nSvelteKit is Svelte's next-generation framework for building web applications. It adds features like routing, server-side rendering, and data fetching, simplifying the development process.\n\n**Key Concepts:**\n\n* **Routing:** Defining how different parts of your application are accessed via URLs.\n* **Pages:** Components that represent individual pages in your application.\n* **Layouts:** Reusable components that wrap your pages.\n* **Data Loading:** Fetching data on the server or client-side.\n* **API Routes:** Creating serverless functions for handling API requests.\n\n### Advanced SvelteKit\n\nThis section expands upon SvelteKit's capabilities, covering advanced routing techniques, handling errors and redirects, and leveraging hooks for fine-grained control over the application lifecycle. \n\nThis tutorial provides a foundation for building impressive web applications with Svelte. To further your learning, consult the official Svelte documentation and explore the many community resources available online.",
+  "codeBlocks": [],
+  "headings": [
+    {
+      "level": 2,
+      "text": "What is Svelte?"
+    },
+    {
+      "level": 2,
+      "text": "How to use this tutorial"
+    }
+  ],
+  "summary": "This Svelte tutorial provides a comprehensive guide to building web applications using Svelte and SvelteKit.  It covers fundamental concepts like components, reactivity, and state management, as well as advanced topics such as actions, transitions, and routing.  The tutorial aims to equip users with the skills to create performant and efficient web applications.",
+  "keypoints": [
+    "Svelte Component Fundamentals (creation, attributes, styling, nesting)",
+    "Reactivity and State Management (state, derived state, effects)",
+    "Event Handling and Data Binding (DOM events, inline handlers, input bindings)",
+    "Advanced Svelte Features (actions, transitions, key blocks, stores)",
+    "SvelteKit Introduction (routing, layouts, data loading, API routes)",
+    "SvelteKit Advanced Features (hooks, error handling, redirects, advanced routing)"
+  ],
+  "scrapedAt": "2025-07-17T01:43:47.638Z",
+  "category": "Core Concepts and Getting Started",
+  "priority": "high"
+}

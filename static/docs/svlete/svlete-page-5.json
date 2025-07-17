@@ -1,0 +1,35 @@
+{
+  "url": "https://svelte.dev/docs/cli",
+  "title": "Overview • Docs • Svelte",
+  "content": "The Svelte command-line interface (CLI), `sv`, is a toolkit for creating and maintaining Svelte applications.\n\nThe easiest way to run `sv` is with `npx` (or your package manager's equivalent, such as `pnpx` for pnpm):\n\n```bash\nnpx sv <command> <args>\n```\n\nIf `sv` is already installed in your project, this will use the local installation; otherwise, it will download the latest version and run it without installing it globally. This is particularly useful for `sv create`.\n\nAcknowledgements:\n\nThank you to Christopher Brown, who originally owned the `sv` name on npm, for graciously allowing its use for the Svelte CLI. You can find the original `sv` package at `@chbrown/sv`.",
+  "codeBlocks": [
+    {
+      "language": "bash",
+      "code": "npx sv <command> <args>"
+    }
+  ],
+  "headings": [
+    {
+      "level": 3,
+      "text": "On this page"
+    },
+    {
+      "level": 2,
+      "text": "Usage"
+    },
+    {
+      "level": 2,
+      "text": "Acknowledgements"
+    }
+  ],
+  "summary": "The Svelte CLI (`sv`) is a command-line tool for building and managing Svelte projects.  It's easily accessible via `npx sv <command> <args>`, leveraging local installations when available or downloading the latest version otherwise.  This simplifies project creation and maintenance.",
+  "keypoints": [
+    "Provides a command-line interface (`sv`) for Svelte development.",
+    "Easily used with `npx sv <command> <args>` for convenience.",
+    "Utilizes local installations when present, otherwise downloads the latest version.",
+    "Crucial for tasks like project creation (`sv create`)."
+  ],
+  "scrapedAt": "2025-07-17T01:44:06.453Z",
+  "category": "Tools and Frameworks",
+  "priority": "medium"
+}

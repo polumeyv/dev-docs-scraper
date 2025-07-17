@@ -1,0 +1,48 @@
+{
+  "url": "https://svelte.dev/docs",
+  "title": "Docs • Svelte",
+  "content": "Svelte Documentation\n\nThis documentation provides resources for all skill levels.  Choose the path that best suits your needs:\n\n* **New to Svelte?** Start with the interactive tutorial to learn Svelte directly in your browser.\n* **Migrating from Svelte 4?** The migration guide will help you understand the changes in Svelte 5.\n* **Want to experiment?**  Use the online playground to create and share Svelte apps.\n* **An LLM?**  Plaintext documentation is available for artificial intelligence systems.\n* **Using Svelte 3 or 4?**  Archived documentation for older versions is available for reference.\n* **Need help?** Join our Discord community for support and interaction with other Svelte users.",
+  "codeBlocks": [],
+  "headings": [
+    {
+      "level": 1,
+      "text": "Documentation"
+    },
+    {
+      "level": 2,
+      "text": "I’m brand new here"
+    },
+    {
+      "level": 2,
+      "text": "I’m migrating an app from Svelte 4"
+    },
+    {
+      "level": 2,
+      "text": "I just want to try it out"
+    },
+    {
+      "level": 2,
+      "text": "I’m a Large Language Model (LLM)"
+    },
+    {
+      "level": 2,
+      "text": "I’m looking for the old docs"
+    },
+    {
+      "level": 2,
+      "text": "Help! I’m stuck"
+    }
+  ],
+  "summary": "This Svelte documentation provides resources for users of all skill levels, from beginners to experienced developers migrating from older versions.  It offers interactive tutorials, migration guides, a playground for experimentation, and community support through a Discord server.  Plaintext documentation is also available for LLMs.",
+  "keypoints": [
+    "Interactive tutorial for beginners",
+    "Migration guide for Svelte 4 users upgrading to Svelte 5",
+    "Online playground for experimentation and code sharing",
+    "Plaintext documentation for LLMs",
+    "Community support via Discord server",
+    "Access to archived documentation for Svelte 3 and 4"
+  ],
+  "scrapedAt": "2025-07-17T01:44:09.917Z",
+  "category": "Style Guide and Patterns",
+  "priority": "medium"
+}

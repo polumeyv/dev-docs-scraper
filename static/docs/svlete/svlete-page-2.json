@@ -1,0 +1,32 @@
+{
+  "url": "https://svelte.dev/docs/svelte",
+  "title": "Overview • Docs • Svelte",
+  "content": "Svelte is a radical new approach to building user interfaces.  Instead of using a virtual DOM, Svelte compiles your code at build time into small, highly optimized vanilla JavaScript. This means no runtime overhead, less code to download, and faster updates. \n\nYou can use Svelte to build anything on the web, from small interactive components to ambitious full-stack applications.  SvelteKit, Svelte's companion application framework, helps streamline building complex applications. \n\nSvelte's simplicity and performance make it a great choice for developers of all levels.  For beginners, the interactive tutorial provides a gentle introduction to the framework's core concepts.  If you prefer hands-on learning, explore the online playground or StackBlitz.",
+  "codeBlocks": [
+    {
+      "language": "html",
+      "code": "<script>\n\tfunction greet() {\n\t\talert('Welcome to Svelte!');\n\t}\n</script>\n\n<button onclick={greet}>Click me</button>\n\n<style>\n\tbutton {\n\t\tfont-size: 2em;\n\t}\n</style>"
+    },
+    {
+      "language": "typescript",
+      "code": "<script lang=\"ts\">\n\tfunction greet() {\n\t\talert('Welcome to Svelte!');\n\t}\n</script>\n\n<button onclick={greet}>Click me</button>\n\n<style>\n\tbutton {\n\t\tfont-size: 2em;\n\t}\n</style>"
+    }
+  ],
+  "headings": [
+    {
+      "level": 3,
+      "text": "On this page"
+    }
+  ],
+  "summary": "Svelte is a compiler-based web framework that transforms declarative components written in HTML, CSS, and JavaScript into highly optimized JavaScript code.  It allows building everything from small components to large-scale applications, including full-stack apps with SvelteKit.",
+  "keypoints": [
+    "Compiler-based: Transpiles components to highly optimized JavaScript.",
+    "Declarative components: Uses HTML, CSS, and JavaScript for building UIs.",
+    "Versatile: Suitable for various projects, from small components to full-stack applications with SvelteKit.",
+    "High performance: Creates lean and efficient JavaScript code.",
+    "Easy to learn: Offers an interactive tutorial for beginners."
+  ],
+  "scrapedAt": "2025-07-17T01:43:52.688Z",
+  "category": "Core Concepts and Getting Started",
+  "priority": "high"
+}

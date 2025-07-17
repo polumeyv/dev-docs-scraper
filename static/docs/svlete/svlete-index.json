@@ -1,0 +1,85 @@
+{
+  "framework": "svlete",
+  "topic": "svlete",
+  "scrapedAt": "2025-07-17T01:44:10.919Z",
+  "totalPages": 5,
+  "categories": [
+    "Core Concepts and Getting Started",
+    "Style Guide and Patterns",
+    "Tools and Frameworks"
+  ],
+  "summary": "Svelte is a compiler-based framework for building web applications that transforms declarative components (written in HTML, CSS, and JavaScript) into highly optimized JavaScript code.  This results in smaller bundle sizes and improved performance compared to traditional frameworks like React or Angular.  Svelte's core features include reactive programming, allowing for efficient updates to the UI, and a component-based architecture promoting code reusability and maintainability.\n\nThe ecosystem includes SvelteKit, a full-stack framework built on top of Svelte that simplifies building complex web applications.  SvelteKit provides features like server-side rendering (SSR), hot module replacement (HMR), and routing, making the development process more efficient.  The Svelte CLI (`sv`) further streamlines project creation and management.\n\nComprehensive documentation and tutorials cater to all skill levels, from beginners to advanced users, and include interactive learning resources, migration guides, and a dedicated community forum (Discord).  Resources are also provided for Large Language Models (LLMs) in plaintext format.  Whether building small components or large-scale, full-stack applications, Svelte offers a powerful and efficient approach to web development.",
+  "pages": [
+    {
+      "url": "https://svelte.dev/tutorial",
+      "title": "Introduction / Welcome to Svelte • Svelte Tutorial",
+      "category": "Core Concepts and Getting Started",
+      "priority": "high",
+      "summary": "This Svelte tutorial provides a comprehensive guide to building web applications using Svelte and SvelteKit.  It covers fundamental concepts like components, reactivity, and state management, as well as advanced topics such as actions, transitions, and routing.  The tutorial aims to equip users with the skills to create performant and efficient web applications.",
+      "keypoints": [
+        "Svelte Component Fundamentals (creation, attributes, styling, nesting)",
+        "Reactivity and State Management (state, derived state, effects)",
+        "Event Handling and Data Binding (DOM events, inline handlers, input bindings)",
+        "Advanced Svelte Features (actions, transitions, key blocks, stores)",
+        "SvelteKit Introduction (routing, layouts, data loading, API routes)",
+        "SvelteKit Advanced Features (hooks, error handling, redirects, advanced routing)"
+      ]
+    },
+    {
+      "url": "https://svelte.dev/docs/svelte",
+      "title": "Overview • Docs • Svelte",
+      "category": "Core Concepts and Getting Started",
+      "priority": "high",
+      "summary": "Svelte is a compiler-based web framework that transforms declarative components written in HTML, CSS, and JavaScript into highly optimized JavaScript code.  It allows building everything from small components to large-scale applications, including full-stack apps with SvelteKit.",
+      "keypoints": [
+        "Compiler-based: Transpiles components to highly optimized JavaScript.",
+        "Declarative components: Uses HTML, CSS, and JavaScript for building UIs.",
+        "Versatile: Suitable for various projects, from small components to full-stack applications with SvelteKit.",
+        "High performance: Creates lean and efficient JavaScript code.",
+        "Easy to learn: Offers an interactive tutorial for beginners."
+      ]
+    },
+    {
+      "url": "https://svelte.dev/docs",
+      "title": "Docs • Svelte",
+      "category": "Style Guide and Patterns",
+      "priority": "medium",
+      "summary": "This Svelte documentation provides resources for users of all skill levels, from beginners to experienced developers migrating from older versions.  It offers interactive tutorials, migration guides, a playground for experimentation, and community support through a Discord server.  Plaintext documentation is also available for LLMs.",
+      "keypoints": [
+        "Interactive tutorial for beginners",
+        "Migration guide for Svelte 4 users upgrading to Svelte 5",
+        "Online playground for experimentation and code sharing",
+        "Plaintext documentation for LLMs",
+        "Community support via Discord server",
+        "Access to archived documentation for Svelte 3 and 4"
+      ]
+    },
+    {
+      "url": "https://svelte.dev/docs/kit",
+      "title": "Introduction • Docs • Svelte",
+      "category": "Tools and Frameworks",
+      "priority": "medium",
+      "summary": "This document introduces Svelte and SvelteKit, highlighting their differences and capabilities. Svelte is a compiler that converts UI components into optimized JavaScript and CSS, while SvelteKit is a framework building upon Svelte to simplify the creation of robust, performant web applications with features like routing, SSR, and HMR.",
+      "keypoints": [
+        "Svelte compiles UI components to optimized JavaScript and CSS.",
+        "SvelteKit is a framework for building web apps using Svelte, offering features like routing, SSR, prerendering, and HMR.",
+        "SvelteKit simplifies complex development tasks, allowing developers to focus on the creative aspects of building web applications.",
+        "SvelteKit provides solutions to common development challenges and follows modern best practices.",
+        "SvelteKit offers similar functionality to Next.js (React) and Nuxt.js (Vue)."
+      ]
+    },
+    {
+      "url": "https://svelte.dev/docs/cli",
+      "title": "Overview • Docs • Svelte",
+      "category": "Tools and Frameworks",
+      "priority": "medium",
+      "summary": "The Svelte CLI (`sv`) is a command-line tool for building and managing Svelte projects.  It's easily accessible via `npx sv <command> <args>`, leveraging local installations when available or downloading the latest version otherwise.  This simplifies project creation and maintenance.",
+      "keypoints": [
+        "Provides a command-line interface (`sv`) for Svelte development.",
+        "Easily used with `npx sv <command> <args>` for convenience.",
+        "Utilizes local installations when present, otherwise downloads the latest version.",
+        "Crucial for tasks like project creation (`sv create`)."
+      ]
+    }
+  ]
+}

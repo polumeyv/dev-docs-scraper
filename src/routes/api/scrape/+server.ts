@@ -3,7 +3,7 @@ import { ScraperService } from '$lib/server/scraperService';
 import { IntelligentScraperService } from '$lib/server/intelligentScraperService';
 import { validateConfig } from '$lib/server/config';
 import { v4 as uuidv4 } from 'uuid';
-import { taskEvents, activeTasks } from '$lib/server/taskEvents';
+import { taskEvents, activeTasks, cleanupTask } from '$lib/server/taskEvents';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request }) => {
@@ -70,6 +70,11 @@ async function runBasicScraping(taskId: string, url: string, framework: string) 
 			activeTasks.set(id, task);
 			// Emit SSE event
 			taskEvents.emit(id, updates);
+			
+			// Clean up completed or errored tasks
+			if (updates.status === 'completed' || updates.status === 'error') {
+				cleanupTask(id);
+			}
 		}
 	};
 
@@ -98,6 +103,11 @@ async function runIntelligentScraping(
 			activeTasks.set(id, task);
 			// Emit SSE event
 			taskEvents.emit(id, updates);
+			
+			// Clean up completed or errored tasks
+			if (updates.status === 'completed' || updates.status === 'error') {
+				cleanupTask(id);
+			}
 		}
 	};
 
